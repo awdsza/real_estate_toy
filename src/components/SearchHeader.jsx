@@ -1,5 +1,10 @@
 import React from "react";
-
+import { BsHouseFill } from "react-icons/bs";
 export default function SearchHeader() {
-  return <div>검색영역</div>;
+  return (
+    <header>
+      <BsHouseFill />
+      검색영역
+    </header>
+  );
 }
