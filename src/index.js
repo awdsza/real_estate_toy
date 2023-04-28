@@ -2,12 +2,39 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
-
+import Apartments from "./components/Apartments";
+import ApartmentDetail from "./components/ApartmentDetail";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <div>Not Found Error!!</div>,
+    children: [
+      {
+        path: "/apartment/list",
+        element: <Apartments />,
+      },
+      {
+        path: "/apartment",
+        element: <Apartments />,
+      },
+      {
+        index: true,
+        element: <Apartments />,
+      },
+      {
+        path: "/apartment/:apartId",
+        element: <ApartmentDetail />,
+      },
+    ],
+  },
+]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}></RouterProvider>
   </React.StrictMode>
 );
 
