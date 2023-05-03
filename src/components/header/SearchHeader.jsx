@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Form, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsHouseFill } from "react-icons/bs";
 import BubjungDongCodeSearch from "./BJDCodeSearch";
 import KeywordSearch from "./KeywordSearch";
@@ -27,9 +27,6 @@ export default function SearchHeader() {
         keyword ? `keyword=${keyword}` : `bjdCode=${sigungu ? sigungu : sido}`
       }`
     );
-  };
-  const clickRegCode = (value) => {
-    console.log(value);
   };
   return (
     <header className="flex flex-col h-16">

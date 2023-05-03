@@ -1,7 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { Link, Form, useNavigate } from "react-router-dom";
-import { BsHouseFill, BsSearch } from "react-icons/bs";
-import { IoClose } from "react-icons/io5";
+import React, { useState } from "react";
+import { BsSearch } from "react-icons/bs";
 import { AiOutlineRight } from "react-icons/ai";
 const simpleData = [
   "서울시",
@@ -49,8 +47,6 @@ const simpleData2 = [
   "송파구",
 ];
 export default function BjdCodeSearch({ toggleSearchMode, submitBjd }) {
-  const navigate = useNavigate();
-
   const [openSelectBox, setOpenSelectBox] = useState(false);
   const [selectedBjd, setSelectedBjd] = useState({
     sido: "",
