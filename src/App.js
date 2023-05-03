@@ -1,11 +1,13 @@
 import { Outlet } from "react-router";
-import SearchHeader from "./components/SearchHeader";
+import SearchHeader from "./components/header/SearchHeader";
 
 function App() {
   return (
-    <section>
+    <section className="my-3 mx-2 ">
       <SearchHeader />
-      <Outlet />
+      <div id="detail">
+        <Outlet />
+      </div>
     </section>
   );
 }
