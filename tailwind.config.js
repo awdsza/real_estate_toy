@@ -5,10 +5,12 @@ module.exports = {
     extend: {
       backgroundColor: {
         base: "#ffffff",
+        accordian: "#e8e8e8",
       },
       colors: {
         mainColor: "#f5f5f5",
         baseColor: "#565eb6",
+
         buttonColor: "#efeeee",
       },
       borderWidth: {
