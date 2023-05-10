@@ -1,33 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { BsHouseFill } from "react-icons/bs";
 import BubjungDongCodeSearch from "./BJDCodeSearch";
 import KeywordSearch from "./KeywordSearch";
+import { useHeaderContext } from "../../context/HeaderProvider";
 export default function SearchHeader() {
-  const [searchMode, setSearchMode] = useState({
-    regCodeMode: true,
-    keywordMode: false,
-  });
-  const { regCodeMode, keywordMode } = searchMode;
-
-  const navigate = useNavigate();
-
-  const toggleSearchMode = () => {
-    setSearchMode({
-      ...searchMode,
-      regCodeMode: !regCodeMode,
-      keywordMode: !keywordMode,
-    });
+  const { searchMode, changeSearchMode } = useHeaderContext();
+  const toggleSearchMode = (mode) => {
+    changeSearchMode(mode);
   };
-  const submitSearch = (searchData) => {
-    const { keyword, sido, sigungu } = searchData;
 
-    navigate(
-      `/apartment/list?${
-        keyword ? `keyword=${keyword}` : `bjdCode=${sigungu ? sigungu : sido}`
-      }`
-    );
-  };
   return (
     <header className="flex flex-col h-16">
       <div className="w-full text-bold text-xl text-baseColor">
@@ -37,16 +19,10 @@ export default function SearchHeader() {
         </Link>
       </div>
       <section className="flex flex-row items-center w-full relative h-8 gap-2 mb-2">
-        {regCodeMode ? (
-          <BubjungDongCodeSearch
-            toggleSearchMode={toggleSearchMode}
-            submitBjd={submitSearch}
-          />
+        {searchMode === "bjdCodeSearch" ? (
+          <BubjungDongCodeSearch toggleSearchMode={toggleSearchMode} />
         ) : (
-          <KeywordSearch
-            toggleSearchMode={toggleSearchMode}
-            submitKeyword={submitSearch}
-          />
+          <KeywordSearch toggleSearchMode={toggleSearchMode} />
         )}
       </section>
     </header>

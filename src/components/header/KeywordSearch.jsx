@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Form } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
-export default function KeywordSearch({ toggleSearchMode, submitKeyword }) {
-  const [keyword, setKeyword] = useState("");
+import { useHeaderContext } from "../../context/HeaderProvider";
+export default function KeywordSearch({ toggleSearchMode }) {
+  const { submitSearch, searchState } = useHeaderContext();
+  const [keyword, setKeyword] = useState(searchState.keyword);
+
   const onSubmit = (e) => {
     e.preventDefault();
-    submitKeyword({ keyword });
+    submitSearch({ keyword });
   };
   return (
     <Form onSubmit={onSubmit} className="h-full w-full">
@@ -15,6 +18,7 @@ export default function KeywordSearch({ toggleSearchMode, submitKeyword }) {
           type="text"
           className="h-full w-3/5 placeholder-current outline-none bg-mainColor"
           placeholder="찾으려는 아파트를 입력해주세요."
+          value={keyword}
           onChange={({ target }) => setKeyword(target.value)}
         />
         <section className="absolute right-0 items-end">
@@ -24,7 +28,7 @@ export default function KeywordSearch({ toggleSearchMode, submitKeyword }) {
           </button>
           <button
             className="text-baseColor text-sm p-2"
-            onClick={toggleSearchMode}
+            onClick={() => toggleSearchMode("bjdCodeSearch")}
           >
             <FaMapMarkerAlt className="h-4 w-4 inline text-baseColor" />
             지역 검색

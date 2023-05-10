@@ -1,10 +1,15 @@
 import { Outlet } from "react-router";
 import SearchHeader from "./components/header/SearchHeader";
-
+import { JusoProvider } from "./context/JusoProvider";
+import { HeaderProvider } from "./context/HeaderProvider";
 function App() {
   return (
     <section className="my-3 mx-2 ">
-      <SearchHeader />
+      <HeaderProvider>
+        <JusoProvider>
+          <SearchHeader />
+        </JusoProvider>
+      </HeaderProvider>
       <div id="detail">
         <Outlet />
       </div>
