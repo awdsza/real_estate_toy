@@ -3,9 +3,12 @@ import { BsSearch } from "react-icons/bs";
 import { AiOutlineRight } from "react-icons/ai";
 import { useJusoAPI } from "../../context/JusoProvider";
 import { useHeaderContext } from "../../context/HeaderProvider";
+import { useLocation } from "react-router-dom";
 export default function BjdCodeSearch({ toggleSearchMode }) {
   const { jusoAPI } = useJusoAPI();
-  const { submitSearch, searchState } = useHeaderContext();
+  const { submitSearch } = useHeaderContext();
+  const { state } = useLocation();
+  console.log(state);
   const [openSelectBox, setOpenSelectBox] = useState({
     isOpen: false,
     selectedBox: "sido",
@@ -20,7 +23,13 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
   });
   const { sidoName, sigunguName } = selectedBjdName;
   const { isOpen, selectedBox } = openSelectBox;
-  const { sido: searchSido, sigungu: searchSigungu } = searchState;
+  let searchSido = "",
+    searchSigungu = "";
+  if (state) {
+    searchSido = state.sido;
+    searchSigungu = state.sigungu;
+  }
+  //const { sido: searchSido, sigungu: searchSigungu } = searchState;
   useEffect(() => {
     async function initEffect() {
       const baseBubJeongDongData = {
@@ -44,6 +53,10 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
         });
       } else {
         setBubJeongDongData({ ...baseBubJeongDongData });
+        setSelectedBjdName({
+          sidoName: "",
+          sigunguName: "",
+        });
       }
     }
     initEffect();
@@ -62,7 +75,7 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
   const clickSigunguCode = ({ code, name }) => {
     setSelectedBjdName((prev) => ({ ...prev, sigunguName: name }));
     setOpenSelectBox({ ...openSelectBox, isOpen: !isOpen });
-    submitSearch({ ...searchState, sigungu: code });
+    submitSearch({ ...state, sigungu: code });
   };
   return (
     <div className="h-full w-full">
