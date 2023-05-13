@@ -8,7 +8,6 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
   const { jusoAPI } = useJusoAPI();
   const { submitSearch } = useHeaderContext();
   const { state } = useLocation();
-  console.log(state);
   const [openSelectBox, setOpenSelectBox] = useState({
     isOpen: false,
     selectedBox: "sido",
@@ -60,7 +59,7 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
       }
     }
     initEffect();
-  }, [searchSido, searchSigungu]);
+  }, [searchSido || "", searchSigungu || ""]);
   const clickSelectBox = async (value) => {
     setOpenSelectBox({ isOpen: !isOpen, selectedBox: value });
   };

@@ -2,9 +2,11 @@ import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const HeaderContext = createContext();
 export function HeaderProvider({ children }) {
-  const [searchMode, setSearchMode] = useState("");
+  const [searchMode, setSearchMode] = useState(
+    localStorage.getItem("searchMode") || "bjdCodeSearch"
+  );
   const navigate = useNavigate();
-  const submitSearch = ({ keyword, sido, sigungu }) => {
+  const submitSearch = ({ keyword = "", sido = "", sigungu = "" }) => {
     navigate(
       `/apartment/list?${
         keyword ? `keyword=${keyword}` : `bjdCode=${sigungu ? sigungu : sido}`

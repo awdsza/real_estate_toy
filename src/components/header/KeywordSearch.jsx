@@ -7,10 +7,10 @@ import { useLocation } from "react-router-dom";
 export default function KeywordSearch({ toggleSearchMode }) {
   const { submitSearch } = useHeaderContext();
   const { state } = useLocation();
-  const keyword = state ? state.keyword : "";
+  const keyword = state?.keyword || "";
   const [text, setText] = useState("");
   useEffect(() => {
-    setText(keyword);
+    setText(keyword || "");
   }, [keyword]);
   const onSubmit = (e) => {
     e.preventDefault();
