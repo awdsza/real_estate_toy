@@ -3,11 +3,11 @@ import { BsSearch } from "react-icons/bs";
 import { AiOutlineRight } from "react-icons/ai";
 import { useJusoAPI } from "../../context/JusoProvider";
 import { useHeaderContext } from "../../context/HeaderProvider";
-import { useLocation } from "react-router-dom";
+import { useCommonContext } from "../../context/CommonProvider";
 export default function BjdCodeSearch({ toggleSearchMode }) {
   const { jusoAPI } = useJusoAPI();
   const { submitSearch } = useHeaderContext();
-  const { state } = useLocation();
+  const { state } = useCommonContext();
   const [openSelectBox, setOpenSelectBox] = useState({
     isOpen: false,
     selectedBox: "sido",
@@ -22,12 +22,8 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
   });
   const { sidoName, sigunguName } = selectedBjdName;
   const { isOpen, selectedBox } = openSelectBox;
-  let searchSido = "",
-    searchSigungu = "";
-  if (state) {
-    searchSido = state.sido;
-    searchSigungu = state.sigungu;
-  }
+  const { searchSigunguCode, searchSidoCode } = state;
+
   //const { sido: searchSido, sigungu: searchSigungu } = searchState;
   useEffect(() => {
     async function initEffect() {
@@ -35,8 +31,9 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
         sidoList: await jusoAPI.getSido(),
         sigunguList: [],
       };
-      if (searchSido) {
-        const sigunguList = await jusoAPI.getSigunGu(searchSido);
+
+      if (searchSidoCode) {
+        const sigunguList = await jusoAPI.getSigunGu(searchSidoCode);
         setBubJeongDongData({
           ...baseBubJeongDongData,
           sigunguList,
@@ -44,10 +41,10 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
         setSelectedBjdName({
           ...selectedBjdName,
           sidoName: baseBubJeongDongData.sidoList.find(
-            ({ code }) => code === searchSido
+            ({ code }) => code === searchSidoCode
           )?.name,
           sigunguName: sigunguList.find(
-            ({ code }) => code.substring(0, 4) === searchSigungu
+            ({ code }) => code.substring(0, 4) === searchSigunguCode
           )?.name,
         });
       } else {
@@ -59,7 +56,7 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
       }
     }
     initEffect();
-  }, [searchSido || "", searchSigungu || ""]);
+  }, [searchSidoCode, searchSigunguCode]);
   const clickSelectBox = async (value) => {
     setOpenSelectBox({ isOpen: !isOpen, selectedBox: value });
   };
@@ -68,13 +65,14 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
       sidoName: name,
       sigunguName: "",
     }));
+
     setOpenSelectBox({ ...openSelectBox, isOpen: !isOpen });
-    submitSearch({ sido: code, sigungu: "" });
+    submitSearch({ searchSidoCode: code, searchSigunguCode: "" });
   };
   const clickSigunguCode = ({ code, name }) => {
     setSelectedBjdName((prev) => ({ ...prev, sigunguName: name }));
     setOpenSelectBox({ ...openSelectBox, isOpen: !isOpen });
-    submitSearch({ ...state, sigungu: code });
+    submitSearch({ ...state, searchSigunguCode: code });
   };
   return (
     <div className="h-full w-full">

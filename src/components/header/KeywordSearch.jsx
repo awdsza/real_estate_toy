@@ -3,18 +3,20 @@ import { Form } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useHeaderContext } from "../../context/HeaderProvider";
-import { useLocation } from "react-router-dom";
+import { useCommonContext } from "../../context/CommonProvider";
 export default function KeywordSearch({ toggleSearchMode }) {
   const { submitSearch } = useHeaderContext();
-  const { state } = useLocation();
-  const keyword = state?.keyword || "";
+  const {
+    state: { searchKeyword },
+  } = useCommonContext();
   const [text, setText] = useState("");
   useEffect(() => {
-    setText(keyword || "");
-  }, [keyword]);
+    setText(searchKeyword || "");
+  }, [searchKeyword]);
   const onSubmit = (e) => {
     e.preventDefault();
-    submitSearch({ keyword: text });
+    submitSearch({ searchKeyword: text });
+    setText("");
   };
   return (
     <Form onSubmit={onSubmit} className="h-full w-full">

@@ -1,34 +1,32 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 const HeaderContext = createContext();
 export function HeaderProvider({ children }) {
-  const [searchMode, setSearchMode] = useState(
-    localStorage.getItem("searchMode") || "bjdCodeSearch"
-  );
   const navigate = useNavigate();
-  const submitSearch = ({ keyword = "", sido = "", sigungu = "" }) => {
+  const submitSearch = ({
+    searchKeyword = "",
+    searchSidoCode = "",
+    searchSigunguCode = "",
+  }) => {
     navigate(
       `/apartment/list?${
-        keyword ? `keyword=${keyword}` : `bjdCode=${sigungu ? sigungu : sido}`
+        searchKeyword
+          ? `keyword=${searchKeyword}`
+          : `bjdCode=${searchSigunguCode ? searchSigunguCode : searchSidoCode}`
       }`,
       {
         state: {
-          sido,
-          sigungu,
-          keyword,
-          searchMode: searchMode || "bjdCodeSearch",
+          searchSigunguCode,
+          searchSidoCode,
+          searchKeyword,
+          searchMode: localStorage.getItem("searchMode") || "bjdCodeSearch",
         },
       }
     );
   };
-  const changeSearchMode = (mode) => {
-    localStorage.setItem("searchMode", mode);
-    setSearchMode(mode);
-  };
+
   return (
-    <HeaderContext.Provider
-      value={{ submitSearch, searchMode, changeSearchMode }}
-    >
+    <HeaderContext.Provider value={{ submitSearch }}>
       {children}
     </HeaderContext.Provider>
   );

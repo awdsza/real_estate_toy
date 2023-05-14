@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { BsHouseFill } from "react-icons/bs";
 import BubjungDongCodeSearch from "./BJDCodeSearch";
 import KeywordSearch from "./KeywordSearch";
-import { useHeaderContext } from "../../context/HeaderProvider";
+import { useCommonContext } from "../../context/CommonProvider";
 export default function SearchHeader() {
-  const { searchMode, changeSearchMode } = useHeaderContext();
+  const { searchMode, changeSearchMode } = useCommonContext();
   const toggleSearchMode = (mode) => {
     changeSearchMode(mode);
   };
