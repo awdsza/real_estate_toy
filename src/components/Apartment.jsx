@@ -2,19 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Apartment({ data }) {
-  const { as1, as2, as3, bjdCode, kaptName, roadName1, roadName2 } = data;
+  const { apartment_name, road_address, jibun_address, id } = data;
   return (
-    <Link to={`/apartment/${bjdCode}`}>
+    <Link to={`/apartment/${id}`}>
       <li
         className={`py-5 box-content bg-[url('./images/bgAPT.jpeg')] bg-cover bg-no-repeat w-full`}
       >
         <dl>
           <dt className="text-base text-baseColor font-semibold mb-5">
-            {kaptName}
+            {apartment_name}
           </dt>
-          <dd className="text-xs font-medium mb-2">{`${as1} ${as2} ${as3}`}</dd>
-          <dd className="text-xs font-medium mb-2">{roadName1}</dd>
-          <dd className="text-xs font-medium">{roadName2}</dd>
+          <dd className="text-xs font-medium mb-2">{road_address}</dd>
+          <dd className="text-xs font-medium">{jibun_address}</dd>
         </dl>
       </li>
     </Link>
