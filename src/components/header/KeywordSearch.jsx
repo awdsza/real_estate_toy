@@ -35,7 +35,7 @@ export default function KeywordSearch({ toggleSearchMode }) {
           </button>
           <button
             className="text-baseColor text-sm p-2"
-            onClick={() => toggleSearchMode("bjdCodeSearch")}
+            onClick={() => toggleSearchMode("codeSearch")}
           >
             <FaMapMarkerAlt className="h-4 w-4 inline text-baseColor" />
             지역 검색
