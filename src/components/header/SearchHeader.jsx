@@ -11,7 +11,7 @@ export default function SearchHeader() {
   };
 
   return (
-    <header className="flex flex-col h-16">
+    <header className="flex flex-col h-16 w-full sticky top-0 left-0 right-0 z-10 bg-mainColor">
       <div className="w-full text-bold text-xl text-baseColor">
         <Link to="/">
           <BsHouseFill className="w-8 h-full mr-2 text-baseColor inline" />
@@ -19,7 +19,7 @@ export default function SearchHeader() {
         </Link>
       </div>
       <section className="flex flex-row items-center w-full relative h-8 gap-2 mb-2">
-        {searchMode === "bjdCodeSearch" ? (
+        {searchMode === "codeSearch" ? (
           <BubjungDongCodeSearch toggleSearchMode={toggleSearchMode} />
         ) : (
           <KeywordSearch toggleSearchMode={toggleSearchMode} />

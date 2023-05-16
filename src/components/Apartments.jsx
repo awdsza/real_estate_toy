@@ -1,41 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Apartment from "./Apartment";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { useCommonContext } from "../context/CommonProvider";
+import { throttling } from "../util/util";
 export default function Apartments() {
   const { estateAPI } = useEstateAPIContext();
-  const [apartList, setApartList] = useState([]);
+  const [apartState, setApartState] = useState({ list: [] });
+  const [page, setPage] = useState(0);
+  const [fetching, setFetching] = useState(false); //스크롤을 끝까지 내려서 자동 실행중 상태값 저장
+  const [hasLastPage, setHasLastPage] = useState(false);
   const {
     state: {
-      page,
-      numOfRows,
-      searchSidoCode,
       searchSigunguCode,
-      searchKeyword,
+      searchSidoCode,
+      searchKeyword: keyword,
+      numOfRows,
     },
     searchMode,
   } = useCommonContext();
 
-  useEffect(() => {
-    async function initEffect() {
-      let searchParam = { page, numOfRows };
-      if (searchMode === "bjdCodeSearch") {
-        searchParam = {
-          ...searchParam,
-          bubJeongDongCode: searchSigunguCode
-            ? searchSigunguCode
-            : searchSidoCode,
-        };
-      } else {
-        searchParam = { ...searchParam, searchKeyword };
-      }
-      setApartList(await estateAPI.getApartList(searchParam));
+  const [searchState, setSearchState] = useState({
+    numOfRows,
+    keyword: searchMode === "codeSearch" ? "" : keyword,
+    bubJeongDongCode:
+      searchMode === "codeSearch"
+        ? searchSigunguCode
+          ? searchSigunguCode
+          : searchSidoCode
+        : "",
+    searchMode,
+  });
+  const { list } = apartState;
+  const fetchList = useCallback(async () => {
+    const apartData = await estateAPI.getApartList({
+      ...searchState,
+      page: page + 1,
+    });
+    if (parseInt(apartData.page) === 1) {
+      setApartState((prev) => ({ ...apartData }));
+    } else {
+      setApartState((prev) => ({
+        ...apartData,
+        list: prev.list.concat(apartData.list),
+      }));
     }
-    initEffect();
-  }, [searchSidoCode, searchSigunguCode, searchKeyword, page]);
+    if (page === apartState.lastPage) {
+      setHasLastPage(false);
+    }
+    setPage((prev) => prev + 1);
+    setFetching(false);
+  }, [page]);
+  useEffect(() => {
+    if (fetching) fetchList();
+    else if (!hasLastPage) setFetching(false);
+  }, [fetching]);
+  useEffect(() => {
+    console.log(
+      `${searchMode},${keyword},${searchSidoCode},${searchSigunguCode}`
+    );
+    const scrollEvent = throttling(() => {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      if (window.innerHeight + scrollTop >= offsetHeight) {
+        setFetching(true);
+      }
+    });
+    setSearchState({
+      numOfRows,
+      keyword: searchMode === "codeSearch" ? "" : keyword,
+      bubJeongDongCode:
+        searchMode === "codeSearch"
+          ? searchSigunguCode
+            ? searchSigunguCode
+            : searchSidoCode
+          : "",
+      searchMode,
+    });
+    setPage(0);
+    setFetching(true);
+    window.addEventListener("scroll", scrollEvent);
+    return () => window.removeEventListener("scroll", scrollEvent);
+  }, [keyword, searchSidoCode, searchSigunguCode]);
   return (
-    <ul className="grid grid-cols-1 gap-1 gap-y-4 mt-5">
-      {apartList.map((apart) => (
+    <ul className="grid grid-cols-1 gap-1 gap-y-2 mt-5 overflow-y-auto max-h-full">
+      {list.map((apart) => (
         <Apartment data={apart} key={apart.id} />
       ))}
     </ul>

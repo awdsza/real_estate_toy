@@ -1,21 +1,26 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const CommonContext = createContext();
 export function CommonProvider({ children }) {
-  const [searchMode, setSearchMode] = useState();
+  const { state: currentState, search } = useLocation();
+  const [searchMode, setSearchMode] = useState(
+    search.indexOf("keyword") > -1 ? "keywordSearch" : "codeSearch"
+  );
   const changeSearchMode = (mode) => {
-    localStorage.setItem("searchMode", mode);
     setSearchMode(mode);
   };
-  const baseState = { page: 1, numOfRows: 10 };
-  const { state: currentState } = useLocation();
+  const baseState = { page: 1, numOfRows: 20 };
+  const [searchState, setSearchState] = useState({ ...baseState });
+
   return (
     <CommonContext.Provider
       value={{
+        searchState,
+        setSearchState,
         searchMode,
         changeSearchMode,
-        state: { ...currentState, ...baseState },
+        state: { ...baseState, ...currentState },
       }}
     >
       {children}

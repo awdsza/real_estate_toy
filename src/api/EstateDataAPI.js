@@ -3,13 +3,13 @@ export default class EstateDataAPI {
   async getApartList({
     bubJeongDongCode = "",
     id = "",
-    searchKeyword = "",
+    keyword = "",
     page = 1,
     numOfRows = 10,
   }) {
     try {
       const response = await fetch(
-        `/api/apartment?page=${page}&numOfRows=${numOfRows}&keyword=${searchKeyword}&bubJeongDongCode=${bubJeongDongCode}&id=${id}`,
+        `/api/apartment?page=${page}&numOfRows=${numOfRows}&keyword=${keyword}&bubJeongDongCode=${bubJeongDongCode}&id=${id}`,
         {
           headers: {
             "Content-Type": "application/json",

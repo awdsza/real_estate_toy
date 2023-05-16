@@ -19,7 +19,6 @@ export function HeaderProvider({ children }) {
           searchSigunguCode,
           searchSidoCode,
           searchKeyword,
-          searchMode: localStorage.getItem("searchMode") || "bjdCodeSearch",
         },
       }
     );
