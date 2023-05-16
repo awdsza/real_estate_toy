@@ -94,7 +94,7 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
         </button>
       </div>
       {isOpen && (
-        <section className="border-1 bg-buttonColor">
+        <section className="border-1 bg-buttonColor box-border">
           {/*클릭시 시군구 데이터 매핑 */}
           <ul className="grid grid-cols-3 [&>*:nth-child(3n)]:border-r-0">
             {(

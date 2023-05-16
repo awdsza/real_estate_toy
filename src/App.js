@@ -6,7 +6,7 @@ import { EstateAPIProvider } from "./context/EstateAPIProvider";
 import { CommonProvider } from "./context/CommonProvider";
 function App() {
   return (
-    <section className="my-3 mx-2 ">
+    <section className="my-3 mx-2 relative">
       <CommonProvider>
         <HeaderProvider>
           <JusoProvider>
