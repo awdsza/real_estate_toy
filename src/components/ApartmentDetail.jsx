@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import Accordian from "./common/Accordian";
+import { useParams, useLocation } from "react-router-dom";
 const simpleData = new Array(50).fill({
   dealDate: "2023년 4월 17일",
   areaForExclusiveUse: "68.27",
@@ -8,20 +9,27 @@ const simpleData = new Array(50).fill({
   apartmentName: "skView1차",
 });
 export default function ApartmentDetail() {
+  const { apartId } = useParams();
+  const {
+    state: { apartmentName, roadAddress, jibunAddress, buildYear },
+  } = useLocation();
+  const fetchDetailData = useCallback(async () => {}, []);
+  useEffect(() => {
+    fetchDetailData();
+  }, []);
   return (
     <div>
-      <h1 className="font-bold text-2xl">쌍문 삼성 레미안 매매 실거래가 </h1>
+      <h1 className="font-bold text-2xl">{apartmentName} 매매 실거래가 </h1>
       <section className="flex flex-col gap-y-2">
         <Accordian
-          title="아파트 기본정보"
+          title={`아파트 기본정보`}
           titleClass="font-semibold text-xl"
           accordianClass="pr-2"
         >
-          <p>행신 SkView 1차</p>
-          <p>경기도 고양시 덕양구 행신동</p>
-          <p>경기도 고양신 덕양구 충장로 103번길 23</p>
-          <p>경기도 고양시 덕양구 행신동 621</p>
-          <p>행신 SkView 1차</p>
+          <p>{apartmentName}</p>
+          <p>도로명 : {roadAddress}</p>
+          <p>지번주소 : {jibunAddress}</p>
+          <p>건축년도 : {buildYear} 년 </p>
         </Accordian>
         <Accordian
           title="매매 실거래"
