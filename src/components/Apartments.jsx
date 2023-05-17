@@ -55,9 +55,6 @@ export default function Apartments() {
     else if (!hasLastPage) setFetching(false);
   }, [fetching]);
   useEffect(() => {
-    console.log(
-      `${searchMode},${keyword},${searchSidoCode},${searchSigunguCode}`
-    );
     const scrollEvent = throttling(() => {
       const { scrollTop, offsetHeight } = document.documentElement;
       if (window.innerHeight + scrollTop >= offsetHeight) {

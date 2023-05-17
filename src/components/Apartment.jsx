@@ -6,31 +6,30 @@ export default function Apartment({ data }) {
     apartmentName,
     roadAddress,
     jibunAddress,
-    id,
+    jibun,
     bubjeongdongCode,
     dealDate,
     buildYear,
   } = data;
   const navigate = useNavigate();
+  const pageMove = () => {
+    navigate("/apartment/detail", {
+      state: {
+        apartmentName,
+        roadAddress,
+        jibunAddress,
+        jibun,
+        bubjeongdongCode,
+        dealDate,
+        buildYear,
+      },
+    });
+  };
   return (
     <li
       className={`py-5 box-content bg-[url('./images/bgAPT.jpeg')] bg-cover bg-no-repeat w-full`}
     >
-      <a
-        onClick={() =>
-          navigate(`/apartment/${id}`, {
-            state: {
-              apartmentName,
-              roadAddress,
-              jibunAddress,
-              id,
-              bubjeongdongCode,
-              dealDate,
-              buildYear,
-            },
-          })
-        }
-      >
+      <a onClick={pageMove}>
         <dl>
           <dt className="text-base text-baseColor font-semibold mb-5">
             {apartmentName}

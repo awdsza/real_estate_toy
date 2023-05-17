@@ -1,20 +1,29 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Accordian from "./common/Accordian";
-import { useParams, useLocation } from "react-router-dom";
-const simpleData = new Array(50).fill({
-  dealDate: "2023년 4월 17일",
-  areaForExclusiveUse: "68.27",
-  floor: "11",
-  dealPrice: "48,900",
-  apartmentName: "skView1차",
-});
+import { useLocation } from "react-router-dom";
+import { useEstateAPIContext } from "../context/EstateAPIProvider";
+import { lpad } from "../util/util";
 export default function ApartmentDetail() {
-  const { apartId } = useParams();
+  const [apartTradeList, setApartTradeList] = useState([]);
+  const { estateAPI } = useEstateAPIContext();
   const {
-    state: { apartmentName, roadAddress, jibunAddress, buildYear },
+    state: {
+      apartmentName,
+      roadAddress,
+      jibunAddress,
+      buildYear,
+      jibun,
+      bubjeongdongCode,
+    },
   } = useLocation();
-  const fetchDetailData = useCallback(async () => {}, []);
   useEffect(() => {
+    const fetchDetailData = async () => {
+      const { data: tradeList } = await estateAPI.getApartTradeList({
+        bubjeongdongCode,
+        jibun,
+      });
+      setApartTradeList(tradeList);
+    };
     fetchDetailData();
   }, []);
   return (
@@ -22,7 +31,7 @@ export default function ApartmentDetail() {
       <h1 className="font-bold text-2xl">{apartmentName} 매매 실거래가 </h1>
       <section className="flex flex-col gap-y-2">
         <Accordian
-          title={`아파트 기본정보`}
+          title="아파트 기본정보"
           titleClass="font-semibold text-xl"
           accordianClass="pr-2"
         >
@@ -38,7 +47,7 @@ export default function ApartmentDetail() {
         >
           <div className="table-wrp block max-h-80">
             <table className="table-auto w-full">
-              <thead className="sticky top-0  bg-baseColor">
+              <thead className="sticky top-0  bg-baseColor text-base">
                 <tr>
                   <th className="border">거래일</th>
                   <th className="border">
@@ -52,21 +61,38 @@ export default function ApartmentDetail() {
                     <br />
                     (만원)
                   </th>
-                  <th className="border">아파트명</th>
                 </tr>
               </thead>
               <tbody className="h-52 overflow-y-auto">
-                {simpleData.map((data) => (
-                  <tr>
-                    <td className="text-center">
-                      <span>{data.dealDate}</span>
-                    </td>
-                    <td className="text-center">{data.areaForExclusiveUse}</td>
-                    <td className="text-center">{data.floor}</td>
-                    <td className="text-center">{data.dealPrice} </td>
-                    <td className="text-center">{data.apartmentName} </td>
-                  </tr>
-                ))}
+                {apartTradeList.map(
+                  ({
+                    deal_year,
+                    deal_month,
+                    deal_day,
+                    floor,
+                    deal_amount,
+                    apartment_name,
+                    area_for_exclusive_use,
+                    id,
+                  }) => (
+                    <tr key={id}>
+                      <td className="text-center text-sm">
+                        <span>{`${deal_year}년 ${lpad(
+                          deal_month,
+                          "0",
+                          2
+                        )}월 ${lpad(deal_day, "0", 2)}일`}</span>
+                      </td>
+                      <td className="text-center text-sm">
+                        {area_for_exclusive_use}
+                      </td>
+                      <td className="text-center text-sm">{floor}</td>
+                      <td className="text-center text-sm">
+                        {deal_amount.toLocaleString("ko-KR")}{" "}
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>

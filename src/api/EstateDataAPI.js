@@ -25,5 +25,23 @@ export default class EstateDataAPI {
       return [];
     }
   }
-  async getDetail(LAWD_CD, DEAL_YMD) {}
+  async getApartTradeList({ bubjeongdongCode, jibun, dealYear = 2020 }) {
+    try {
+      const response = await fetch(
+        `/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&dealYear=${dealYear}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return {};
+    } catch (error) {
+      console.error(error);
+      return { error, data: null };
+    }
+  }
 }
