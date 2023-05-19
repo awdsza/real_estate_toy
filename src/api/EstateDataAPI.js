@@ -9,7 +9,7 @@ export default class EstateDataAPI {
   }) {
     try {
       const response = await fetch(
-        `/api/apartment?page=${page}&numOfRows=${numOfRows}&keyword=${keyword}&bubJeongDongCode=${bubJeongDongCode}&id=${id}`,
+        `${process.env.REACT_APP_API_END_POINT}/api/apartment?page=${page}&numOfRows=${numOfRows}&keyword=${keyword}&bubJeongDongCode=${bubJeongDongCode}&id=${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export default class EstateDataAPI {
   async getApartTradeList({ bubjeongdongCode, jibun, dealYear = 2020 }) {
     try {
       const response = await fetch(
-        `/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&dealYear=${dealYear}`,
+        `${process.env.REACT_APP_API_END_POINT}/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&dealYear=${dealYear}`,
         {
           headers: {
             "Content-Type": "application/json",
