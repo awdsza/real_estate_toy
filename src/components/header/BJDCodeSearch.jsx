@@ -22,9 +22,13 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
       staleTime: 1000 * 60 * 60 * 24,
     }
   );
+
   const { data: sigunguList } = useQuery(
-    ["sigunguList", searchSidoCode, searchSigunguCode],
-    async () => await jusoAPI.getSigunGu(searchSidoCode)
+    ["sigunguList", searchSidoCode],
+    async () => await jusoAPI.getSigunGu(searchSidoCode),
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+    }
   );
   const clickSelectBox = async (value) => {
     setOpenSelectBox({ isOpen: !isOpen, selectedBox: value });
