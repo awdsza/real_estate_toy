@@ -56,8 +56,9 @@ export default function Apartments() {
   }, [fetching]);
   useEffect(() => {
     const scrollEvent = throttling(() => {
-      const { scrollTop, offsetHeight } = document.documentElement;
-      if (window.innerHeight + scrollTop >= offsetHeight) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (clientHeight + scrollTop >= scrollHeight) {
         setFetching(true);
       }
     });
