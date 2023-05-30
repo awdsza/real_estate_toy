@@ -8,7 +8,7 @@ export default function Apartments() {
   const [apartState, setApartState] = useState({ list: [] });
   const [page, setPage] = useState(0);
   const [fetching, setFetching] = useState(false); //스크롤을 끝까지 내려서 자동 실행중 상태값 저장
-  const [hasLastPage, setHasLastPage] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const {
     state: {
       searchSigunguCode,
@@ -40,15 +40,14 @@ export default function Apartments() {
         list: prev.list.concat(apartData.list),
       }));
     }
-    if (page === apartState.lastPage) {
-      setHasLastPage(false);
-    }
+
+    setHasNextPage(!(page === apartData.lastPage - 1));
     setPage((prev) => prev + 1);
     setFetching(false);
   }, [keyword, searchSidoCode, searchSigunguCode, page]);
   useEffect(() => {
-    if (fetching) fetchList();
-    else if (!hasLastPage) setFetching(false);
+    if (fetching && hasNextPage) fetchList();
+    else if (!hasNextPage) setFetching(false);
   }, [fetching]);
   useEffect(() => {
     const scrollEvent = throttling(() => {
