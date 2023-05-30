@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const CommonContext = createContext();
 export function CommonProvider({ children }) {
   const { state: currentState, search } = useLocation();
-  const [searchMode, setSearchMode] = useState(
-    search.indexOf("keyword") > -1 ? "keywordSearch" : "codeSearch"
-  );
+  const [searchMode, setSearchMode] = useState("");
+  useEffect(() => {
+    setSearchMode(
+      search.indexOf("keyword") > -1 ? "keywordSearch" : "codeSearch"
+    );
+  }, [search]);
   const changeSearchMode = (mode) => {
     setSearchMode(mode);
   };
