@@ -19,21 +19,17 @@ export default function Apartments() {
     searchMode,
   } = useCommonContext();
 
-  const [searchState, setSearchState] = useState({
-    numOfRows,
-    keyword: searchMode === "codeSearch" ? "" : keyword,
-    bubJeongDongCode:
-      searchMode === "codeSearch"
-        ? searchSigunguCode
-          ? searchSigunguCode
-          : searchSidoCode
-        : "",
-    searchMode,
-  });
   const { list } = apartState;
   const fetchList = useCallback(async () => {
     const apartData = await estateAPI.getApartList({
-      ...searchState,
+      numOfRows,
+      keyword: searchMode === "codeSearch" ? "" : keyword,
+      bubJeongDongCode:
+        searchMode === "codeSearch"
+          ? searchSigunguCode
+            ? searchSigunguCode
+            : searchSidoCode
+          : "",
       page: page + 1,
     });
     if (parseInt(apartData.page) === 1) {
@@ -49,7 +45,7 @@ export default function Apartments() {
     }
     setPage((prev) => prev + 1);
     setFetching(false);
-  }, [page]);
+  }, [keyword, searchSidoCode, searchSigunguCode, page]);
   useEffect(() => {
     if (fetching) fetchList();
     else if (!hasLastPage) setFetching(false);
@@ -61,17 +57,6 @@ export default function Apartments() {
       if (clientHeight + scrollTop >= scrollHeight) {
         setFetching(true);
       }
-    });
-    setSearchState({
-      numOfRows,
-      keyword: searchMode === "codeSearch" ? "" : keyword,
-      bubJeongDongCode:
-        searchMode === "codeSearch"
-          ? searchSigunguCode
-            ? searchSigunguCode
-            : searchSidoCode
-          : "",
-      searchMode,
     });
     setPage(0);
     setFetching(true);
