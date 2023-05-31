@@ -77,28 +77,28 @@ export default function ApartmentDetail() {
               <tbody className="h-52 overflow-y-auto">
                 {(apartTradeList || []).map(
                   ({
-                    deal_year,
-                    deal_month,
-                    deal_day,
+                    deal_year: dealYear,
+                    deal_month: dealMonth,
+                    deal_day: dealDay,
                     floor,
-                    deal_amount,
-                    area_for_exclusive_use,
+                    deal_amount: dealAmount,
+                    area_for_exclusive_use: areaForExclusiveUse,
                     id,
                   }) => (
                     <tr key={id}>
                       <td className="text-center text-sm">
-                        <span>{`${deal_year}년 ${lpad(
-                          deal_month,
+                        <span>{`${dealYear}년 ${lpad(
+                          dealMonth,
                           "0",
                           2
-                        )}월 ${lpad(deal_day, "0", 2)}일`}</span>
+                        )}월 ${lpad(dealDay, "0", 2)}일`}</span>
                       </td>
                       <td className="text-center text-sm">
-                        {area_for_exclusive_use}
+                        {areaForExclusiveUse}
                       </td>
                       <td className="text-center text-sm">{floor}</td>
                       <td className="text-center text-sm">
-                        {deal_amount.toLocaleString("ko-KR")}{" "}
+                        {dealAmount.toLocaleString("ko-KR")}
                       </td>
                     </tr>
                   )
