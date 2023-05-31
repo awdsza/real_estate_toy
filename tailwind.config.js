@@ -16,6 +16,10 @@ module.exports = {
       borderWidth: {
         1: "1px",
       },
+      translate: {
+        xHalf: "50%",
+        yHalf: "50%",
+      },
     },
   },
   plugins: [],

@@ -41,6 +41,7 @@ export default function BjdCodeSearch({ toggleSearchMode }) {
     setOpenSelectBox({ ...openSelectBox, isOpen: !isOpen });
     submitSearch({ ...state, searchSigunguCode: code });
   };
+
   return (
     <div className="h-full w-full">
       <div className=" w-full h-8 flex flex-row items-center align-middle font-bold text-xl gap-0.5">
