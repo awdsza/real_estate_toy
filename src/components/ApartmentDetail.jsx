@@ -4,9 +4,10 @@ import { useLocation } from "react-router-dom";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { lpad } from "../util/util";
 import { useSpinnerContext } from "../context/SpinnerProvider";
+import { useQuery } from "@tanstack/react-query";
 export default function ApartmentDetail() {
   const { closeSpinner, openSpinner } = useSpinnerContext();
-  const [apartTradeList, setApartTradeList] = useState([]);
+  // const [apartTradeList, setApartTradeList] = useState([]);
   const { estateAPI } = useEstateAPIContext();
   const {
     state: {
@@ -16,19 +17,26 @@ export default function ApartmentDetail() {
       buildYear,
       jibun,
       bubjeongdongCode,
+      dealYear,
     },
   } = useLocation();
-  useEffect(() => {
-    const fetchDetailData = async () => {
-      const { data: tradeList } = await estateAPI.getApartTradeList({
+  const { data: apartTradeList } = useQuery(
+    ["tradeList", bubjeongdongCode, jibun, dealYear],
+    async () => {
+      const tradeList = await estateAPI.getApartTradeList({
         bubjeongdongCode,
         jibun,
+        dealYear,
       });
-      setApartTradeList(tradeList);
-      closeSpinner();
-    };
-    fetchDetailData();
-  }, []);
+      return tradeList.data;
+    },
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
+  useEffect(() => {
+    closeSpinner();
+  }, [apartTradeList]);
   return (
     <div>
       <h1 className="font-bold text-2xl">{apartmentName} 매매 실거래가 </h1>
@@ -67,14 +75,13 @@ export default function ApartmentDetail() {
                 </tr>
               </thead>
               <tbody className="h-52 overflow-y-auto">
-                {apartTradeList.map(
+                {(apartTradeList || []).map(
                   ({
                     deal_year,
                     deal_month,
                     deal_day,
                     floor,
                     deal_amount,
-                    apartment_name,
                     area_for_exclusive_use,
                     id,
                   }) => (

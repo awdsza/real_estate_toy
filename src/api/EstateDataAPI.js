@@ -25,7 +25,11 @@ export default class EstateDataAPI {
       return [];
     }
   }
-  async getApartTradeList({ bubjeongdongCode, jibun, dealYear = 2020 }) {
+  async getApartTradeList({
+    bubjeongdongCode,
+    jibun,
+    dealYear = new Date().getFullYear(),
+  }) {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_END_POINT}/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&dealYear=${dealYear}`,
