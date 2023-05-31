@@ -3,12 +3,14 @@ import Apartment from "./Apartment";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { useCommonContext } from "../context/CommonProvider";
 import { throttling } from "../util/util";
+import { useSpinnerContext } from "../context/SpinnerProvider";
 export default function Apartments() {
   const { estateAPI } = useEstateAPIContext();
   const [apartState, setApartState] = useState({ list: [] });
   const [page, setPage] = useState(0);
   const [fetching, setFetching] = useState(false); //스크롤을 끝까지 내려서 자동 실행중 상태값 저장
   const [hasNextPage, setHasNextPage] = useState(true);
+  const { closeSpinner, openSpinner } = useSpinnerContext();
   const {
     state: {
       searchSigunguCode,
@@ -21,6 +23,7 @@ export default function Apartments() {
 
   const { list } = apartState;
   const fetchList = useCallback(async () => {
+    openSpinner();
     const apartData = await estateAPI.getApartList({
       numOfRows,
       keyword: searchMode === "codeSearch" ? "" : keyword,
@@ -44,6 +47,7 @@ export default function Apartments() {
     setHasNextPage(!(page === apartData.lastPage - 1));
     setPage((prev) => prev + 1);
     setFetching(false);
+    closeSpinner();
   }, [keyword, searchSidoCode, searchSigunguCode, page]);
   useEffect(() => {
     if (fetching && hasNextPage) fetchList();
