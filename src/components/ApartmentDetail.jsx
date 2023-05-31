@@ -3,7 +3,9 @@ import Accordian from "./common/Accordian";
 import { useLocation } from "react-router-dom";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { lpad } from "../util/util";
+import { useSpinnerContext } from "../context/SpinnerProvider";
 export default function ApartmentDetail() {
+  const { closeSpinner, openSpinner } = useSpinnerContext();
   const [apartTradeList, setApartTradeList] = useState([]);
   const { estateAPI } = useEstateAPIContext();
   const {
@@ -23,6 +25,7 @@ export default function ApartmentDetail() {
         jibun,
       });
       setApartTradeList(tradeList);
+      closeSpinner();
     };
     fetchDetailData();
   }, []);
