@@ -4,9 +4,10 @@ import { useLocation } from "react-router-dom";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { lpad } from "../util/util";
 import { useSpinnerContext } from "../context/SpinnerProvider";
+import { useQuery } from "@tanstack/react-query";
 export default function ApartmentDetail() {
   const { closeSpinner, openSpinner } = useSpinnerContext();
-  const [apartTradeList, setApartTradeList] = useState([]);
+  // const [apartTradeList, setApartTradeList] = useState([]);
   const { estateAPI } = useEstateAPIContext();
   const {
     state: {
@@ -16,19 +17,26 @@ export default function ApartmentDetail() {
       buildYear,
       jibun,
       bubjeongdongCode,
+      dealYear,
     },
   } = useLocation();
-  useEffect(() => {
-    const fetchDetailData = async () => {
-      const { data: tradeList } = await estateAPI.getApartTradeList({
+  const { data: apartTradeList } = useQuery(
+    ["tradeList", bubjeongdongCode, jibun, dealYear],
+    async () => {
+      const tradeList = await estateAPI.getApartTradeList({
         bubjeongdongCode,
         jibun,
+        dealYear,
       });
-      setApartTradeList(tradeList);
-      closeSpinner();
-    };
-    fetchDetailData();
-  }, []);
+      return tradeList.data;
+    },
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
+  useEffect(() => {
+    closeSpinner();
+  }, [apartTradeList]);
   return (
     <div>
       <h1 className="font-bold text-2xl">{apartmentName} 매매 실거래가 </h1>
@@ -67,31 +75,30 @@ export default function ApartmentDetail() {
                 </tr>
               </thead>
               <tbody className="h-52 overflow-y-auto">
-                {apartTradeList.map(
+                {(apartTradeList || []).map(
                   ({
-                    deal_year,
-                    deal_month,
-                    deal_day,
+                    deal_year: dealYear,
+                    deal_month: dealMonth,
+                    deal_day: dealDay,
                     floor,
-                    deal_amount,
-                    apartment_name,
-                    area_for_exclusive_use,
+                    deal_amount: dealAmount,
+                    area_for_exclusive_use: areaForExclusiveUse,
                     id,
                   }) => (
                     <tr key={id}>
                       <td className="text-center text-sm">
-                        <span>{`${deal_year}년 ${lpad(
-                          deal_month,
+                        <span>{`${dealYear}년 ${lpad(
+                          dealMonth,
                           "0",
                           2
-                        )}월 ${lpad(deal_day, "0", 2)}일`}</span>
+                        )}월 ${lpad(dealDay, "0", 2)}일`}</span>
                       </td>
                       <td className="text-center text-sm">
-                        {area_for_exclusive_use}
+                        {areaForExclusiveUse}
                       </td>
                       <td className="text-center text-sm">{floor}</td>
                       <td className="text-center text-sm">
-                        {deal_amount.toLocaleString("ko-KR")}{" "}
+                        {dealAmount.toLocaleString("ko-KR")}
                       </td>
                     </tr>
                   )

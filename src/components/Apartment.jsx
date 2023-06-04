@@ -10,6 +10,7 @@ export default function Apartment({ data }) {
     bubjeongdongCode,
     dealDate,
     buildYear,
+    dealYear,
   } = data;
   const navigate = useNavigate();
   const pageMove = () => {
@@ -22,6 +23,7 @@ export default function Apartment({ data }) {
         bubjeongdongCode,
         dealDate,
         buildYear,
+        dealYear,
       },
     });
   };
