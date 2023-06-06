@@ -9,7 +9,7 @@ export default function Accordian({
 }) {
   const [isOpen, setIsOpen] = useState(open);
   return (
-    <div className={`box-content ${accordianClass}`}>
+    <div className={`box-content overflow-auto ${accordianClass}`}>
       <a
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center align-middle justify-between  bg-accordian"
