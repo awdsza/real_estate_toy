@@ -7,7 +7,9 @@ import { CommonProvider } from "./context/CommonProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SpinnerProvider } from "./context/SpinnerProvider";
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchInterval: false } },
+});
 function App() {
   return (
     <section className="my-3 mx-2 relative">

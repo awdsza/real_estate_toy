@@ -28,11 +28,14 @@ export default class EstateDataAPI {
   async getApartTradeList({
     bubjeongdongCode,
     jibun,
-    dealYear = new Date().getFullYear(),
+    startYear,
+    endYear,
+    page = 1,
+    numOfRows = 10,
   }) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_END_POINT}/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&dealYear=${dealYear}`,
+        `${process.env.REACT_APP_API_END_POINT}/api/trade/detail?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}&startYear=${startYear}&endYear=${endYear}&page=${page}&numOfRows=${numOfRows}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -40,7 +43,8 @@ export default class EstateDataAPI {
         }
       );
       if (response.ok) {
-        return await response.json();
+        const { data } = await response.json();
+        return data;
       }
       return {};
     } catch (error) {
