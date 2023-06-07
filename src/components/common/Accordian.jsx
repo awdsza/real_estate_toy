@@ -9,7 +9,7 @@ export default function Accordian({
 }) {
   const [isOpen, setIsOpen] = useState(open);
   return (
-    <div className={`box-content overflow-auto ${accordianClass}`}>
+    <div className={`box-content ${accordianClass}`}>
       <a
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center align-middle justify-between  bg-accordian"
@@ -21,7 +21,7 @@ export default function Accordian({
           <RxCaretRight className="text-xl" />
         )}
       </a>
-      {isOpen && <div>{children}</div>}
+      {isOpen && <div className="overflow-auto">{children}</div>}
     </div>
   );
 }
