@@ -52,4 +52,24 @@ export default class EstateDataAPI {
       return { error, data: null };
     }
   }
+  async getApartTradeChartData({ bubjeongdongCode, jibun }) {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_END_POINT}/api/trade/chart?bubJeongDongCode=${bubjeongdongCode}&jibun=${jibun}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const { data } = await response.json();
+        return data;
+      }
+      return {};
+    } catch (error) {
+      console.error(error);
+      return { error, data: null };
+    }
+  }
 }
