@@ -2,6 +2,7 @@ import React from "react";
 import DetailTitle from "./detail/DetailTitle";
 import { useLocation } from "react-router-dom";
 import ApartTradeList from "./detail/ApartTradeList";
+import ApartTradeChart from "./detail/ApartTradeChart";
 export default function ApartmentDetail() {
   const {
     state: {
@@ -24,6 +25,7 @@ export default function ApartmentDetail() {
           <p>건축년도 : {buildYear} 년 </p>
         </DetailTitle>
         <DetailTitle title="매매 실거래 내역">
+          <ApartTradeChart bubjeongdongCode={bubjeongdongCode} jibun={jibun} />
           <ApartTradeList
             bubjeongdongCode={bubjeongdongCode}
             jibun={jibun}
