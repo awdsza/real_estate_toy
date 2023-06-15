@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
 });
 function App() {
   return (
-    <section className="my-3 mx-2 relative">
+    <section className="my-3 relative">
       <QueryClientProvider client={queryClient}>
         <SpinnerProvider>
           <CommonProvider>
