@@ -2,19 +2,20 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useEstateAPIContext } from "../../context/EstateAPIProvider";
 import { useQuery } from "@tanstack/react-query";
-export default function ApartTradeChart({ bubjeongdongCode, jibun }) {
+export default function ApartTradeChart({ bubjeongdongCode, jibun, dealType }) {
   const { estateAPI } = useEstateAPIContext();
   const {
     isLoading,
     error,
     data: chartData,
   } = useQuery(
-    ["chartData", bubjeongdongCode, jibun],
+    ["chartData", bubjeongdongCode, jibun, dealType],
     async () => {
       const { tradeAvgData, allTradeData } =
         await estateAPI.getApartTradeChartData({
           bubjeongdongCode,
           jibun,
+          dealType,
         });
       const scatterOption = {
         name: "Points",

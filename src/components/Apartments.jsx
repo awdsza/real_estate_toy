@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import Apartment from "./Apartment";
 import { useEstateAPIContext } from "../context/EstateAPIProvider";
 import { useCommonContext } from "../context/CommonProvider";
-import { throttling } from "../util/util";
 import { useSpinnerContext } from "../context/SpinnerProvider";
 export default function Apartments() {
   const { estateAPI } = useEstateAPIContext();
@@ -19,6 +18,7 @@ export default function Apartments() {
       numOfRows,
     },
     searchMode,
+    throttling,
   } = useCommonContext();
 
   const { list } = apartState;

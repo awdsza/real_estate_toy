@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
+import { lpad, convertCurrencyUnit, throttling } from "../util/util";
 const CommonContext = createContext();
 export function CommonProvider({ children }) {
   const { state: currentState, search } = useLocation();
@@ -23,6 +23,9 @@ export function CommonProvider({ children }) {
         setSearchState,
         searchMode,
         changeSearchMode,
+        lpad,
+        convertCurrencyUnit,
+        throttling,
         state: { ...baseState, ...currentState },
       }}
     >
