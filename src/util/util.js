@@ -21,4 +21,19 @@ const rpad = (baseStr, fillStr, len) => {
     ? baseStr
     : `${baseStr}${new Array(fillLen).fill(fillStr).join("")}`;
 };
-export { throttling, lpad, rpad };
+const convertCurrencyUnit = (currency) => {
+  let currencyNumber = parseInt(currency);
+  let returnUnitArr = [];
+  //Math.trunc(147000/10000)
+  if (currencyNumber >= 10000) {
+    let unit = Math.trunc(currencyNumber / 10000);
+    returnUnitArr[0] = `${unit}억`;
+    currencyNumber -= unit * 10000;
+  }
+  if (currencyNumber > 0) {
+    returnUnitArr[1] = currencyNumber.toLocaleString("ko-KR");
+  }
+
+  return returnUnitArr.join(" ");
+};
+export { throttling, lpad, rpad, convertCurrencyUnit };

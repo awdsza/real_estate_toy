@@ -1,14 +1,13 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useEstateAPIContext } from "../../context/EstateAPIProvider";
 import { useSpinnerContext } from "../../context/SpinnerProvider";
-import { lpad } from "../../util/util";
+import { useCommonContext } from "../../context/CommonProvider";
 import { RxCaretDown } from "react-icons/rx";
 export default function ApartTradeList({
   bubjeongdongCode,
   jibun,
-  startYear,
-  endYear,
   numOfRows = 10,
+  dealType,
 }) {
   const { closeSpinner, openSpinner } = useSpinnerContext();
   const { estateAPI } = useEstateAPIContext();
@@ -16,33 +15,34 @@ export default function ApartTradeList({
   const [tradeList, setTradeList] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [fetching, setFetching] = useState(false);
+  const { lpad, convertCurrencyUnit } = useCommonContext();
   const getTradeData = useCallback(async () => {
     openSpinner();
     const result = await estateAPI.getApartTradeList({
       bubjeongdongCode,
       jibun,
-      startYear,
-      endYear,
+      dealType,
       page: page + 1,
       numOfRows,
     });
     setPage((prev) => prev + 1);
     setHasNextPage(!(page === result.lastPage - 1));
     setTradeList((prev) => prev.concat(result.list));
-    //setFetching(false);
+    setFetching(false);
     closeSpinner();
-  }, [bubjeongdongCode, jibun, startYear, endYear, page]);
+  }, [bubjeongdongCode, jibun, dealType, page]);
   useEffect(() => {
+    console.log(fetching);
     if (fetching) getTradeData();
+    else if (fetching && !hasNextPage) setFetching(false);
   }, [fetching]);
   useEffect(() => {
-    setFetching(true);
-  }, []);
-  const selectDealList = () => {
-    getTradeData();
-  };
+    setTradeList([]);
+    setFetching((prev) => true);
+  }, [bubjeongdongCode, jibun, dealType]);
+
   return (
-    <div className="table-wrp block max-h-80">
+    <div className="table-wrp block min-h-80">
       <table className="table-auto w-full">
         <thead className="sticky top-0  bg-baseColor text-base">
           <tr>
@@ -58,10 +58,11 @@ export default function ApartTradeList({
               <br />
               (만원)
             </th>
+            <th className="border">거래유형</th>
           </tr>
         </thead>
-        <tbody className="h-52 overflow-y-auto">
-          {tradeList.map(
+        <tbody className="min-h-52 overflow-y-auto">
+          {(tradeList || []).map(
             ({
               deal_year: dealYear,
               deal_month: dealMonth,
@@ -70,6 +71,8 @@ export default function ApartTradeList({
               deal_amount: dealAmount,
               area_for_exclusive_use: areaForExclusiveUse,
               id,
+              deal_type: dealType,
+              deal_type_name: dealTypeName,
             }) => (
               <tr key={id}>
                 <td className="text-center text-sm">
@@ -82,7 +85,13 @@ export default function ApartTradeList({
                 <td className="text-center text-sm">{areaForExclusiveUse}</td>
                 <td className="text-center text-sm">{floor}</td>
                 <td className="text-center text-sm">
-                  {dealAmount.toLocaleString("ko-KR")}
+                  {dealType === "monthlyRent"
+                    ? `${convertCurrencyUnit(dealAmount.split("/")[0])}/
+                      ${convertCurrencyUnit(dealAmount.split("/")[1])}`
+                    : convertCurrencyUnit(dealAmount)}
+                </td>
+                <td className="text-center text-sm">
+                  {dealType === "trade" ? "매매" : dealTypeName}
                 </td>
               </tr>
             )
@@ -93,7 +102,7 @@ export default function ApartTradeList({
         <div className="flex flex-nowrap justify-center">
           <button
             className="block h-8 w-full border border-gray-200 text-sm rounded-lg px-2 font-semibold"
-            onClick={selectDealList}
+            onClick={getTradeData}
           >
             <span>더 보기</span>
             <RxCaretDown className="text-xl inline" />
