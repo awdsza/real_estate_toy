@@ -38,6 +38,7 @@ export default function ApartTradeList({
   }, [fetching]);
   useEffect(() => {
     setTradeList([]);
+    setPage(0);
     setFetching((prev) => true);
   }, [bubjeongdongCode, jibun, dealType]);
 
