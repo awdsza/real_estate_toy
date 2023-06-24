@@ -67,7 +67,7 @@ export default function Apartments() {
     return () => window.removeEventListener("scroll", scrollEvent);
   }, [keyword, searchSidoCode, searchSigunguCode]);
   return (
-    <ul className="grid grid-cols-1 gap-1 gap-y-2 mt-5 overflow-y-auto max-h-full">
+    <ul className="grid grid-cols-1 gap-1 gap-y-2 overflow-y-auto max-h-full">
       {list.map((apart) => (
         <Apartment data={apart} key={apart.id} />
       ))}
