@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { lpad, convertCurrencyUnit, throttling } from "../util/util";
 const CommonContext = createContext();
 export function CommonProvider({ children }) {
-  const { state: currentState, search } = useLocation();
+  const { state: currentState, search, pathname: path } = useLocation();
   const [searchMode, setSearchMode] = useState("");
   useEffect(() => {
     setSearchMode(
@@ -27,6 +27,7 @@ export function CommonProvider({ children }) {
         convertCurrencyUnit,
         throttling,
         state: { ...baseState, ...currentState },
+        path,
       }}
     >
       {children}
